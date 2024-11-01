@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Package Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    
+    }
+    .calculator-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(50, 38, 38, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 8px 4px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .output {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator-container">
+    <h2 style="color:orange;">Snap India Trip</h2>
+    <h2>Travel Package Calculator</h2>
+    <div class="input-group">
+      <label for="accommodation">Accommodation Cost (per night per room):</label>
+      <input type="number" id="accommodation"  placeholder="Enter cost per night">
+    </div>
+    <div class="input-group">
+      <label for="room">No. of Rooms:</label>
+      <input type="number" id="room" value="1" placeholder="No of Room">
+    </div>
+  
+    <div class="input-group">
+      <label for="transport">Transportation Cost (per day):</label>
+      <input type="number" id="transport" placeholder="Enter transport cost">
+    </div>
+    <div class="input-group">
+      <label for="vehical">No. of Vehical:</label>
+      <input type="number" id="vehical" value="1" placeholder="Enter transport cost">
+    </div>
+    <div class="input-group">
+        <label for="guide">Guide/Scout cost (per day)</label>
+        <input type="number" id="guide" placeholder="Enter Guide Cost">
+      </div>
+    <div class="input-group">
+      <label for="meals">Meals Cost (per day):</label>
+      <input type="number" id="meals" value="0" placeholder="Enter cost per day">
+    </div>
+    <div class="input-group">
+      <label for="extra">Extra Charges:</label>
+      <input type="number" id="extra" value="0" placeholder="Enter extra Charges">
+    </div>
+    <div class="input-group">
+      <label for="days">Number of Days:</label>
+      <input type="number" id="days" placeholder="Enter number of days">
+    </div>
+    <!-- <div class="input-group">
+        <label for="nights">Number of Nights:</label>
+        <input type="number" id="nights" placeholder="Enter number of nights">
+      </div> -->
+    <div class="input-group">
+        <label for="pax">Number of Person:</label>
+        <input type="number" id="pax" placeholder="Enter number of Person">
+      </div>
+    <div class="input-group">
+      <label for="markup">Markup (%) :</label>
+      <input type="number" id="markup" value="30" placeholder="Enter markup percentage">
+    </div>
+    <!-- <div class="input-group">
+      <label for="discount">Discount (%) :</label>
+      <input type="number" id="discount" placeholder="Enter discount percentage">
+    </div> -->
+    <button onclick="calculatePackage()">Calculate Package</button>
+    <button onclick="refresh()">Refresh</button>
+    <div class="output" id="output"></div>
+    <div class="output" id="L-output"></div>
+  </div>
+
+  <script>
+    function refresh(){
+      // Clear all input fields
+      document.getElementById('accommodation').value = '';
+      // document.getElementById('nights').value = '';
+      document.getElementById('transport').value = '';
+      document.getElementById('meals').value = '';
+      document.getElementById('days').value = '';
+      document.getElementById('guide').value = '';
+      document.getElementById('pax').value = '';
+      document.getElementById('extra').value = '';
+
+      // Clear the output
+      document.getElementById('output').innerText = '';
+      document.getElementById('L-output').innerText = '';
+    
+    }
+    function calculatePackage() {
+      // Retrieve input values
+      const accommodation = parseFloat(document.getElementById('accommodation').value) || 0;
+      const transport = parseFloat(document.getElementById('transport').value) || 0;
+      const meals = parseFloat(document.getElementById('meals').value) || 0;
+      const guides = parseFloat(document.getElementById('guide').value) || 0;
+      const person = parseFloat(document.getElementById('pax').value) || 0;
+      const days = parseInt(document.getElementById('days').value) || 0;
+      const markup = parseFloat(document.getElementById('markup').value) || 0;
+      const extracharges = parseFloat(document.getElementById('extra').value) || 0;
+      const Room = parseFloat(document.getElementById('room').value) || 0;
+      const Vehical = parseFloat(document.getElementById('vehical').value) || 0;
+    //   const discount = parseFloat(document.getElementById('discount').value) || 0;
+
+      // Calculate individual costs
+      const totalAccommodation = accommodation *(days-1)*Room;
+      const totalMeals = meals * days;
+      const totalguide = guides * days;
+      const totaltransport = transport * days*Vehical;
+      const subtotal = totalAccommodation + totaltransport+totalMeals+totalguide+ extracharges;
+
+      // Apply markup and discount
+      const totalWithMarkup = subtotal * (1 + markup / 100);
+      const totalperperson = totalWithMarkup/person;
+    //   const finalTotal = totalWithMarkup * (1 - discount / 100);
+
+      // Display result
+      document.getElementById('output').innerText = `Total Package Cost: ₹${totalWithMarkup.toFixed(2)}`;
+      document.getElementById('L-output').innerText = `Per Person: ₹${totalperperson.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
