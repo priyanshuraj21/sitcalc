@@ -104,6 +104,8 @@
     <button onclick="refresh()">Refresh</button>
     <div class="output" id="output"></div>
     <div class="output" id="L-output"></div>
+    <div class="output" id="usdd-output"></div>
+    <div class="output" id="usd-output"></div>
   </div>
 
   <script>
@@ -121,6 +123,8 @@
       // Clear the output
       document.getElementById('output').innerText = '';
       document.getElementById('L-output').innerText = '';
+      document.getElementById('usd-output').innerText = '';
+      document.getElementById('usdd-output').innerText = '';
     
     }
     function calculatePackage() {
@@ -149,9 +153,40 @@
       const totalperperson = totalWithMarkup/person;
     //   const finalTotal = totalWithMarkup * (1 - discount / 100);
 
-      // Display result
+            // Display result
       document.getElementById('output').innerText = `Total Package Cost: ₹${totalWithMarkup.toFixed(2)}`;
       document.getElementById('L-output').innerText = `Per Person: ₹${totalperperson.toFixed(2)}`;
+
+      
+
+      async function convertCurrency() {
+            const inrAmount = totalperperson;
+            const inrtAmount = totalWithMarkup;
+
+            try {
+                // Fetch the current exchange rate from an API
+                const response = await fetch('https://api.exchangerate-api.com/v4/latest/INR');
+                const data = await response.json();
+
+                // Get the exchange rate for USD
+                const exchangeRate = data.rates.USD;
+
+                if (!exchangeRate) {
+                    document.getElementById('usd-output').innerText = "Unable to fetch exchange rate. Try again later.";
+                    return;
+                }
+
+                // Calculate the USD amount
+                const usdAmount = (inrAmount * exchangeRate).toFixed(2);
+                const usddAmount = (inrtAmount * exchangeRate).toFixed(2);
+                document.getElementById('usdd-output').innerText= `${inrtAmount} ₹ = ${usddAmount} $`;
+                document.getElementById('usd-output').innerText= `${inrAmount} ₹ = ${usdAmount} $`;
+            } catch (error) {
+                document.getElementById('usd-output').innerText= "Error fetching data. Please check your connection or try again later.";
+            }
+        }
+  convertCurrency();
+  
     }
   </script>
 </body>
